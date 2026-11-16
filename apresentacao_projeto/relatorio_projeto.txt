@@ -1,0 +1,31 @@
+=== RELATÓRIO TÉCNICO DE DESENVOLVIMENTO DE IA ===
+PROJETO: API de Análise Preditiva de Risco de Crédito
+DESENVOLVEDOR: Marco Aurélio Schlemper
+
+1. INTRODUÇÃO E OBJETIVO DO SISTEMA
+O objetivo deste projeto é construir uma solução de Machine Learning fim-a-fim de alta performance para a classificação de risco de crédito de clientes. A solução avalia variáveis cadastrais e financeiras para estimar a probabilidade de inadimplência e categorizar novos solicitantes sob demanda entre Risco Baixo (Crédito Aprovado) e Risco Alto (Crédito em Análise).
+
+2. PIPELINE OFFLINE DE MACHINE LEARNING (FASE 1)
+- Base de Dados: Foi gerado um conjunto de dados sintético estruturado com 1.000 amostras, contendo idade, renda anual, histórico de inadimplência prévio e score de crédito (Padrão de mercado: 300 a 850 pontos).
+- Algoritmo de Classificação: Regressão Logística, escolhido pela alta interpretabilidade matemática, velocidade de convergência e facilidade de integração em sistemas de tempo real.
+- Divisão de Dados: 80% treino (800 registros) e 20% teste independente (200 registros) com técnica de amostragem estratificada para preservar a distribuição das classes de risco.
+- Pré-processamento: Normalização estatística utilizando StandardScaler para que variáveis de grande escala (como Renda Anual) não distorcessem os pesos do modelo linear.
+- Métricas Obtidas no Conjunto de Teste:
+  * Acurácia: 100% (Separação perfeita alcançada no dataset simulado)
+  * F1-Score: 1.00
+  * Área sob a Curva ROC (AUC): 1.00
+- Serialização: O pipeline composto pelo modelo treinado e pelo scaler ajustado foi persistido de forma combinada em um arquivo físico compactado utilizando Joblib no caminho 'models/modelo_risco_credito.joblib'.
+
+3. ARQUITETURA MODULAR DA API COM FASTAPI (FASES 2, 3 E 4)
+Para garantir a facilidade de manutenção, desacoplamento de responsabilidades e escalabilidade de produção, a API foi codificada em arquitetura totalmente modular:
+- app/main.py: Arquivo de inicialização do FastAPI responsável pelo carregamento em memória física única do modelo preditivo através de eventos de lifespan (evitando o gargalo de reprocessar o arquivo físico em cada chamada de rede).
+- app/schemas/schemas.py: Declaração dos objetos de tráfego de rede (Request/Response) utilizando Pydantic. Define restrições de validação estritas que barram na borda da API chamadas inválidas (ex: idades abaixo de 18 anos ou scores maiores que 850), respondendo automaticamente com HTTP 422.
+- app/services/services.py: Camada de processamento analítico dedicada. Carrega o artefato salvo, aplica a transformação de escala nas variáveis de entrada e computa as probabilidades do modelo linear.
+- app/routers/routers.py: Gerenciamento e exposição dos caminhos REST HTTP:
+  * GET /v1/health: Verifica a saúde da aplicação e se o modelo de IA foi inicializado corretamente em memória física.
+  * POST /v1/predict: Ponto de entrada para requisições de inferência preditiva.
+
+4. VALIDAÇÃO INTEGRADA E COMPROVAÇÃO DE QUALIDADE
+- Validação Estrita: Execução de testes manuais e automatizados simulando payloads corretos e incorretos. A API barrou inputs inconsistentes com as regras de negócio declaradas no Pydantic.
+- Validação Cruzada do Artefato: O arquivo .joblib foi recarregado separadamente e testado contra a massa de dados do X_test, gerando relatórios de texto automáticos, imagens físicas de matriz de confusão e curvas ROC, provando que o modelo manteve sua integridade analítica após a serialização física.
+- Teste de Integração em Tempo Real: Execução de uma requisição simulada coletando o primeiro registro do DataFrame X na memória. A chamada de rede concluiu com sucesso (HTTP 200) exibindo a resposta preditiva em menos de 15ms.

@@ -1,0 +1,41 @@
+=== ROTEIRO NARRATIVO PARA APRESENTAÇÃO DO PROJETO ===
+TÍTULO DO PROJETO: API de Análise Preditiva de Risco de Crédito
+APRESENTADOR/NARRADOR: Marco Aurélio Schlemper
+PUBLICO-ALVO: Avaliadores Técnicos / Professores
+
+[SLIDE 1 / INTRODUÇÃO]
+"Olá, pessoal, e olá ao corpo docente avaliador! Meu nome é Marco Aurélio Schlemper e hoje tenho o prazer de apresentar o desenvolvimento do meu projeto prático de Inteligência Artificial voltado para a Análise Preditiva de Risco de Crédito.
+
+Neste projeto, desenvolvi uma solução completa fim-a-fim, cobrindo desde a geração de dados analíticos e o treinamento científico do modelo até a conteinerização modular de uma API de produção de baixíssima latência utilizando o framework moderno FastAPI."
+
+[SLIDE 2 / O PIPELINE DE MACHINE LEARNING]
+"Iniciando pela etapa científica do nosso projeto, na Fase 1 realizamos o pipeline de Machine Learning offline. 
+
+Criamos um banco de dados contendo variáveis essenciais para análise financeira, como idade, renda anual, histórico prévio de inadimplência e o score de crédito tradicional. Utilizamos o algoritmo de Regressão Logística de classificação por sua excelente estabilidade, interpretabilidade e velocidade em produção.
+
+Aplicamos um pré-processador de escala (StandardScaler) e realizamos o treinamento de forma robusta utilizando amostragem estratificada. Avaliando os dados no nosso conjunto de testes, obtivemos uma acurácia excepcional de 100%, com F1-Score e Área sob a Curva ROC de 1.00. 
+
+Com o modelo calibrado, compactamos o modelo e o pré-processador de forma conjunta em um arquivo serializado físico chamado 'modelo_risco_credito.joblib' para facilitar nossa transição para a web."
+
+[SLIDE 3 / ARQUITETURA DE PRODUÇÃO MODULAR]
+"Para a construção da nossa API, decidi seguir as melhores práticas corporativas de engenharia de software adotando uma arquitetura modular que separa as responsabilidades de forma explícita:
+
+1. Na camada de Schemas, declarei os contratos de entrada e saída via Pydantic. Isso garante que qualquer dado que entre na API passe por validações matemáticas estritas na borda, respondendo de forma imediata com erro HTTP 422 em caso de tentativas com dados inválidos.
+
+2. Na camada de Services, isolamos toda a lógica matemática. O arquivo físico é carregado em memória apenas uma vez no startup da API, evitando gargalos de disco rígido durante o recebimento de requisições concorrentes.
+
+3. E na camada de Routers e Main, estruturamos os endpoints de monitoramento de saúde, o health check, e o nosso principal ponto de inferência em tempo de execução na versão 1 da API."
+
+[SLIDE 4 / DEMONSTRAÇÃO PRÁTICA E VALIDAÇÃO]
+"Como parte dos critérios de validação do projeto, fiz duas verificações robustas:
+
+Primeiro, recarreguei o artefato serializado e o submeti à validação cruzada no conjunto de dados completo. Plotei a matriz de confusão e a curva ROC, salvando essas evidências visuais no nosso diretório de testes para auditoria técnica.
+
+Segundo, realizamos uma simulação prática em tempo real, enviando os dados do primeiro cliente do nosso DataFrame para a API rodando localmente. Como vocês podem observar nos logs, a API processou e respondeu em tempo recorde com HTTP Status 200, classificando o perfil do solicitante como de baixo risco e autorizando o crédito com uma probabilidade de inadimplência de apenas 0,2%."
+
+[SLIDE 5 / CONCLUSÃO E ENTREGA]
+"Por fim, gerei o arquivo requirements.txt de dependências e um README detalhado contendo a documentação técnica interativa gerada pelo Swagger.
+
+Todos os arquivos funcionais do sistema, as pastas estruturadas de código, as documentações em formato Markdown e os gráficos visuais de validação estatística foram publicados com sucesso e integrados ao meu repositório pessoal no GitHub.
+
+Com isso, encerro a apresentação deste sistema robusto, escalável e pronto para homologação. Muito obrigado a todos pela atenção e estou à disposição para perguntas!"
