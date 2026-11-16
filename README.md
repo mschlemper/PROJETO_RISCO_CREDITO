@@ -31,8 +31,8 @@ Esta API foi desenvolvida para atender à Situação de Aprendizagem de Desenvol
 
 1. Clone o repositório:
    ```bash
-   git clone <link-do-seu-repositorio>
-   cd <nome-do-repositorio>
+   git clone https://github.com/mschlemper/PROJETO_RISCO_CREDITO.git
+   cd PROJETO_RISCO_CREDITO
    ```
 2. Crie e ative o ambiente virtual (venv):
    ```bash
